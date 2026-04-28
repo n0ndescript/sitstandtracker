@@ -309,6 +309,20 @@ struct AnalyticsSummary {
     let averageStandDuration: TimeInterval
 }
 
+@MainActor
+private final class StoreTicker: NSObject {
+    weak var store: TrackerStore?
+
+    init(store: TrackerStore) {
+        self.store = store
+    }
+
+    @objc func fire(_ timer: Timer) {
+        store?.tick()
+    }
+}
+
+@MainActor
 @Observable
 final class TrackerStore {
     private enum StorageKeys {
@@ -329,10 +343,13 @@ final class TrackerStore {
     private let defaults: UserDefaults
     private let encoder = JSONEncoder()
     private let decoder = JSONDecoder()
+    @ObservationIgnored private var timer: Timer?
+    @ObservationIgnored private var ticker: StoreTicker?
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
         load()
+        startTicker()
     }
 
     var currentPosture: Posture? {
@@ -399,6 +416,10 @@ final class TrackerStore {
         let currentTime = Date()
         now = currentTime
         evaluateAlertState(at: currentTime)
+    }
+
+    func prepareForQuit() {
+        persist()
     }
 
     func start(posture: Posture) {
@@ -582,6 +603,14 @@ final class TrackerStore {
         } else {
             defaults.removeObject(forKey: StorageKeys.activeSession)
         }
+    }
+
+    private func startTicker() {
+        let ticker = StoreTicker(store: self)
+        self.ticker = ticker
+        let timer = Timer(timeInterval: 1, target: ticker, selector: #selector(StoreTicker.fire(_:)), userInfo: nil, repeats: true)
+        self.timer = timer
+        RunLoop.main.add(timer, forMode: .common)
     }
 
     private func evaluateAlertState(at currentTime: Date, shouldPersist: Bool = true) {

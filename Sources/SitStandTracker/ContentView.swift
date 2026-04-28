@@ -4,9 +4,6 @@ struct ContentView: View {
     @Environment(TrackerStore.self) private var trackerStore
     @State private var selectedPage = AppPage.dashboard
     @State private var expandedHistoryDayIDs: Set<Date> = []
-    @State private var currentTime = Date()
-
-    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     var body: some View {
         HStack(spacing: 0) {
@@ -20,10 +17,6 @@ struct ContentView: View {
                     .frame(maxWidth: .infinity, alignment: .topLeading)
             }
             .background(pageBackground)
-        }
-        .onReceive(timer) { value in
-            currentTime = value
-            trackerStore.tick()
         }
     }
 
@@ -96,7 +89,7 @@ struct ContentView: View {
 
     private var dashboardPage: some View {
         VStack(alignment: .leading, spacing: 22) {
-            pageHeader(title: "Dashboard", subtitle: currentTime.formatted(date: .abbreviated, time: .shortened))
+            pageHeader(title: "Dashboard", subtitle: trackerStore.now.formatted(date: .abbreviated, time: .shortened))
 
             HStack(alignment: .top, spacing: 18) {
                 currentStatusCard

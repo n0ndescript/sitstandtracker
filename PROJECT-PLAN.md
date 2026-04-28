@@ -308,6 +308,8 @@ Acceptance criteria:
 
 ## Phase 8: Window And App Lifecycle
 
+Status: Completed on 2026-04-28. See `PHASE-8-HANDOFF.md` for details on what was implemented and what remains incomplete.
+
 Goal: make the app behave like a hybrid dashboard plus menu-bar utility.
 
 Likely files:

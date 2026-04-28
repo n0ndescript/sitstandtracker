@@ -20,8 +20,6 @@ struct MenuBarPanel: View {
     @Environment(TrackerStore.self) private var trackerStore
     @Environment(\.openWindow) private var openWindow
 
-    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             if let alertKind = trackerStore.activeAlertKind {
@@ -34,6 +32,7 @@ struct MenuBarPanel: View {
 
             HStack {
                 Button {
+                    NSApp.setActivationPolicy(.regular)
                     openWindow(id: "dashboard")
                     NSApp.activate(ignoringOtherApps: true)
                 } label: {
@@ -52,9 +51,6 @@ struct MenuBarPanel: View {
         }
         .padding(18)
         .frame(width: 340)
-        .onReceive(timer) { _ in
-            trackerStore.tick()
-        }
     }
 
     private var normalPanel: some View {
