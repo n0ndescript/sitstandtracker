@@ -336,6 +336,8 @@ Acceptance criteria:
 
 ## Phase 9: Screen Lock And Day Boundary Rules
 
+Status: Completed on 2026-04-28. See `PHASE-9-HANDOFF.md` for details on what was implemented and what remains incomplete.
+
 Goal: implement the lifecycle rules that make time accounting accurate.
 
 Likely files:

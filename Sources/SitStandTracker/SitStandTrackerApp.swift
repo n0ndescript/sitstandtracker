@@ -4,6 +4,8 @@ import SwiftUI
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
     var prepareForQuit: (() -> Void)?
+    var handleScreenLocked: (() -> Void)?
+    var handleScreenUnlocked: (() -> Void)?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.regular)
@@ -18,6 +20,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             self,
             selector: #selector(dashboardWindowDidBecomeKey(_:)),
             name: NSWindow.didBecomeKeyNotification,
+            object: nil
+        )
+        DistributedNotificationCenter.default().addObserver(
+            self,
+            selector: #selector(screenLocked(_:)),
+            name: Notification.Name("com.apple.screenIsLocked"),
+            object: nil
+        )
+        DistributedNotificationCenter.default().addObserver(
+            self,
+            selector: #selector(screenUnlocked(_:)),
+            name: Notification.Name("com.apple.screenIsUnlocked"),
             object: nil
         )
     }
@@ -41,6 +55,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.setActivationPolicy(.regular)
     }
 
+    @objc private func screenLocked(_ notification: Notification) {
+        handleScreenLocked?()
+    }
+
+    @objc private func screenUnlocked(_ notification: Notification) {
+        handleScreenUnlocked?()
+    }
+
     private func isDashboardWindow(_ window: NSWindow?) -> Bool {
         window?.title == "SitStandTracker"
     }
@@ -59,6 +81,12 @@ struct SitStandTrackerApp: App {
                 .onAppear {
                     appDelegate.prepareForQuit = {
                         trackerStore.prepareForQuit()
+                    }
+                    appDelegate.handleScreenLocked = {
+                        trackerStore.handleScreenLocked()
+                    }
+                    appDelegate.handleScreenUnlocked = {
+                        trackerStore.handleScreenUnlocked()
                     }
                 }
         }

@@ -389,11 +389,14 @@ final class TrackerStore {
 
     var historyDays: [DayHistory] {
         let calendar = Calendar.current
-        var dayStarts = Set(sessions.map { calendar.startOfDay(for: $0.startDate) })
+        var dayStarts = Set<Date>()
+        for session in sessions {
+            dayStarts.formUnion(dayStartsOverlapping(start: session.startDate, end: session.endDate, calendar: calendar))
+        }
         dayStarts.insert(calendar.startOfDay(for: now))
 
         if let activeSession {
-            dayStarts.insert(calendar.startOfDay(for: activeSession.startDate))
+            dayStarts.formUnion(dayStartsOverlapping(start: activeSession.startDate, end: now, calendar: calendar))
         }
 
         return dayStarts
@@ -439,15 +442,12 @@ final class TrackerStore {
             return
         }
 
-        sessions.append(
-            TrackingSession(
-                id: UUID(),
-                posture: activeSession.posture,
-                startDate: activeSession.startDate,
-                endDate: currentTime,
-                source: activeSession.source,
-                createdAt: currentTime
-            )
+        appendCompletedSessions(
+            posture: activeSession.posture,
+            startDate: activeSession.startDate,
+            endDate: currentTime,
+            source: activeSession.source,
+            createdAt: currentTime
         )
         self.activeSession = ActiveSession(posture: posture, startDate: currentTime, source: .manualSwitch)
         trackingState = trackingState(for: posture)
@@ -458,15 +458,12 @@ final class TrackerStore {
         guard let activeSession else { return }
 
         let currentTime = Date()
-        sessions.append(
-            TrackingSession(
-                id: UUID(),
-                posture: activeSession.posture,
-                startDate: activeSession.startDate,
-                endDate: currentTime,
-                source: activeSession.source,
-                createdAt: currentTime
-            )
+        appendCompletedSessions(
+            posture: activeSession.posture,
+            startDate: activeSession.startDate,
+            endDate: currentTime,
+            source: activeSession.source,
+            createdAt: currentTime
         )
         self.activeSession = nil
         trackingState = .stopped
@@ -509,6 +506,35 @@ final class TrackerStore {
 
     func dismissAlert() {
         postponeAlert(markDismissed: true)
+    }
+
+    func handleScreenLocked() {
+        guard let activeSession else { return }
+
+        let currentTime = Date()
+        appendCompletedSessions(
+            posture: activeSession.posture,
+            startDate: activeSession.startDate,
+            endDate: currentTime,
+            source: activeSession.source,
+            createdAt: currentTime
+        )
+        self.activeSession = nil
+        trackingState = lockedTrackingState(for: activeSession.posture)
+        alertState = .inactive
+        now = currentTime
+        persist()
+    }
+
+    func handleScreenUnlocked() {
+        guard let posture = lockedPosture else { return }
+
+        let currentTime = Date()
+        activeSession = ActiveSession(posture: posture, startDate: currentTime, source: .resumeAfterUnlock)
+        trackingState = trackingState(for: posture)
+        alertState = .inactive
+        now = currentTime
+        persist()
     }
 
     func analyticsSummaryForRecentDays(count: Int) -> AnalyticsSummary {
@@ -691,17 +717,52 @@ final class TrackerStore {
         }
     }
 
+    private func appendCompletedSessions(
+        posture: Posture,
+        startDate: Date,
+        endDate: Date,
+        source: SessionSource,
+        createdAt: Date
+    ) {
+        guard endDate > startDate else { return }
+
+        let calendar = Calendar.current
+        var segmentStart = startDate
+        var isFirstSegment = true
+
+        while segmentStart < endDate {
+            let nextDayStart = calendar.startOfDay(for: segmentStart.addingTimeInterval(24 * 60 * 60))
+            let segmentEnd = min(nextDayStart, endDate)
+            let segmentSource = isFirstSegment ? source : SessionSource.midnightSplitContinuation
+
+            sessions.append(
+                TrackingSession(
+                    id: UUID(),
+                    posture: posture,
+                    startDate: segmentStart,
+                    endDate: segmentEnd,
+                    source: segmentSource,
+                    createdAt: createdAt
+                )
+            )
+
+            segmentStart = segmentEnd
+            isFirstSegment = false
+        }
+    }
+
     private func summary(for date: Date, calendar: Calendar) -> DaySummary {
         let daySessions = sessions(for: date, calendar: calendar)
-        var sittingDuration = duration(for: .sitting, in: daySessions)
-        var standingDuration = duration(for: .standing, in: daySessions)
+        var sittingDuration = duration(for: .sitting, on: date, in: daySessions, calendar: calendar)
+        var standingDuration = duration(for: .standing, on: date, in: daySessions, calendar: calendar)
 
-        if let activeSession, calendar.isDate(activeSession.startDate, inSameDayAs: date) {
+        if let activeSession {
+            let activeDuration = overlapDuration(start: activeSession.startDate, end: now, on: date, calendar: calendar)
             switch activeSession.posture {
             case .sitting:
-                sittingDuration += now.timeIntervalSince(activeSession.startDate)
+                sittingDuration += activeDuration
             case .standing:
-                standingDuration += now.timeIntervalSince(activeSession.startDate)
+                standingDuration += activeDuration
             }
         }
 
@@ -711,8 +772,8 @@ final class TrackerStore {
         return DaySummary(
             sittingDuration: sittingDuration,
             standingDuration: standingDuration,
-            averageSitDuration: averageDuration(for: completedSittingSessions),
-            averageStandDuration: averageDuration(for: completedStandingSessions),
+            averageSitDuration: averageDuration(for: completedSittingSessions, on: date, calendar: calendar),
+            averageStandDuration: averageDuration(for: completedStandingSessions, on: date, calendar: calendar),
             longestSittingDuration: longestDuration(for: .sitting, on: date, in: daySessions, calendar: calendar),
             longestStandingDuration: longestDuration(for: .standing, on: date, in: daySessions, calendar: calendar),
             targetSittingShare: preferences.targetSittingShare,
@@ -723,14 +784,19 @@ final class TrackerStore {
 
     private func sessions(for date: Date, calendar: Calendar) -> [TrackingSession] {
         sessions
-            .filter { calendar.isDate($0.startDate, inSameDayAs: date) }
+            .filter { overlapDuration(start: $0.startDate, end: $0.endDate, on: date, calendar: calendar) > 0 }
             .sorted { $0.startDate > $1.startDate }
     }
 
-    private func duration(for posture: Posture, in sessions: [TrackingSession]) -> TimeInterval {
+    private func duration(
+        for posture: Posture,
+        on date: Date,
+        in sessions: [TrackingSession],
+        calendar: Calendar
+    ) -> TimeInterval {
         sessions
             .filter { $0.posture == posture }
-            .reduce(0) { $0 + $1.duration }
+            .reduce(0) { $0 + overlapDuration(start: $1.startDate, end: $1.endDate, on: date, calendar: calendar) }
     }
 
     private func averageDuration(for sessions: [TrackingSession]) -> TimeInterval {
@@ -738,9 +804,50 @@ final class TrackerStore {
         return sessions.reduce(0) { $0 + $1.duration } / Double(sessions.count)
     }
 
+    private func averageDuration(for sessions: [TrackingSession], on date: Date, calendar: Calendar) -> TimeInterval {
+        let durations = sessions
+            .map { overlapDuration(start: $0.startDate, end: $0.endDate, on: date, calendar: calendar) }
+            .filter { $0 > 0 }
+        return average(durations)
+    }
+
     private func average(_ durations: [TimeInterval]) -> TimeInterval {
         guard !durations.isEmpty else { return 0 }
         return durations.reduce(0, +) / Double(durations.count)
+    }
+
+    private func overlapDuration(start: Date, end: Date, on date: Date, calendar: Calendar) -> TimeInterval {
+        guard end > start else { return 0 }
+
+        let dayStart = calendar.startOfDay(for: date)
+        guard let dayEnd = calendar.date(byAdding: .day, value: 1, to: dayStart) else {
+            return 0
+        }
+
+        let overlapStart = max(start, dayStart)
+        let overlapEnd = min(end, dayEnd)
+        return max(overlapEnd.timeIntervalSince(overlapStart), 0)
+    }
+
+    private func dayStartsOverlapping(start: Date, end: Date, calendar: Calendar) -> Set<Date> {
+        guard end > start else {
+            return [calendar.startOfDay(for: start)]
+        }
+
+        var days = Set<Date>()
+        var cursor = calendar.startOfDay(for: start)
+
+        while cursor < end {
+            days.insert(cursor)
+
+            guard let nextDay = calendar.date(byAdding: .day, value: 1, to: cursor) else {
+                break
+            }
+
+            cursor = nextDay
+        }
+
+        return days
     }
 
     private func longestDuration(
@@ -751,16 +858,15 @@ final class TrackerStore {
     ) -> TimeInterval {
         let completedLongest = sessions
             .filter { $0.posture == posture }
-            .map(\.duration)
+            .map { overlapDuration(start: $0.startDate, end: $0.endDate, on: date, calendar: calendar) }
             .max() ?? 0
 
         guard let activeSession,
-              activeSession.posture == posture,
-              calendar.isDate(activeSession.startDate, inSameDayAs: date) else {
+              activeSession.posture == posture else {
             return completedLongest
         }
 
-        return max(completedLongest, now.timeIntervalSince(activeSession.startDate))
+        return max(completedLongest, overlapDuration(start: activeSession.startDate, end: now, on: date, calendar: calendar))
     }
 
     private func goalStatus(sittingDuration: TimeInterval, standingDuration: TimeInterval) -> GoalStatus {
@@ -790,6 +896,26 @@ final class TrackerStore {
             return .activeSitting
         case .standing:
             return .activeStanding
+        }
+    }
+
+    private var lockedPosture: Posture? {
+        switch trackingState {
+        case .lockedSitting:
+            return .sitting
+        case .lockedStanding:
+            return .standing
+        default:
+            return nil
+        }
+    }
+
+    private func lockedTrackingState(for posture: Posture) -> TrackingState {
+        switch posture {
+        case .sitting:
+            return .lockedSitting
+        case .standing:
+            return .lockedStanding
         }
     }
 
