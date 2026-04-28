@@ -1016,18 +1016,19 @@ private extension TimeInterval {
     }
 
     var formattedShortDuration: String {
-        let totalMinutes = max(Int((self / 60).rounded()), 0)
-        let hours = totalMinutes / 60
-        let minutes = totalMinutes % 60
-
-        if hours > 0 && minutes > 0 {
-            return "\(hours)h \(minutes)m"
-        }
+        let totalSeconds = max(Int(self.rounded()), 0)
+        let hours = totalSeconds / 3600
+        let minutes = (totalSeconds % 3600) / 60
+        let seconds = totalSeconds % 60
 
         if hours > 0 {
-            return "\(hours)h"
+            return "\(hours)h \(minutes)m \(seconds)s"
         }
 
-        return "\(minutes)m"
+        if minutes > 0 {
+            return "\(minutes)m \(seconds)s"
+        }
+
+        return "\(seconds)s"
     }
 }
