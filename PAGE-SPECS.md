@@ -172,7 +172,7 @@ Recommended copy:
 
 ## 8. Mockups
 
-- Dashboard: [startup-dashboard-reference.svg](/Users/siddharthv/code/the-archaeologist/mac/SitStandTracker/mockups/startup-dashboard-reference.svg)
-- History: [history-mockup.svg](/Users/siddharthv/code/the-archaeologist/mac/SitStandTracker/mockups/history-mockup.svg)
-- Analytics: [analytics-mockup.svg](/Users/siddharthv/code/the-archaeologist/mac/SitStandTracker/mockups/analytics-mockup.svg)
-- Settings: [settings-mockup.svg](/Users/siddharthv/code/the-archaeologist/mac/SitStandTracker/mockups/settings-mockup.svg)
+- Dashboard: [startup-dashboard-reference.svg](mockups/startup-dashboard-reference.svg)
+- History: [history-mockup.svg](mockups/history-mockup.svg)
+- Analytics: [analytics-mockup.svg](mockups/analytics-mockup.svg)
+- Settings: [settings-mockup.svg](mockups/settings-mockup.svg)

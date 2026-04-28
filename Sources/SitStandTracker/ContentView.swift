@@ -128,6 +128,7 @@ struct ContentView: View {
                 .buttonStyle(.borderedProminent)
                 .clipShape(Circle())
                 .help(trackerStore.currentPosture == nil ? "Start Sitting" : "Stop Tracking")
+                .accessibilityLabel(trackerStore.currentPosture == nil ? "Start sitting" : "Stop tracking")
             }
 
             Text(elapsedLabel)

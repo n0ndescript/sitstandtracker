@@ -8,10 +8,13 @@ struct MenuBarLabel: View {
         if let alertKind = trackerStore.activeAlertKind {
             Label(alertKind.shortTitle, systemImage: alertKind.symbolName)
                 .foregroundStyle(alertKind.tint)
+                .accessibilityLabel(alertKind.title)
         } else if let posture = trackerStore.currentPosture {
             Label("\(posture.menuTitle) \(trackerStore.elapsedInCurrentPosture.formattedCompactDuration)", systemImage: posture.symbolName)
+                .accessibilityLabel("\(posture.title), \(trackerStore.elapsedInCurrentPosture.formattedDuration)")
         } else {
             Label("Idle", systemImage: "pause.circle")
+                .accessibilityLabel("No active posture")
         }
     }
 }

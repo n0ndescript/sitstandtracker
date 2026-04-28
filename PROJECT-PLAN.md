@@ -366,6 +366,8 @@ Acceptance criteria:
 
 ## Phase 10: Polish And Verification
 
+Status: Completed on 2026-04-28. See `PHASE-10-HANDOFF.md` for final polish notes, verification results, and remaining manual checks.
+
 Goal: tighten UX, docs, and maintainability after feature completion.
 
 Tasks:
