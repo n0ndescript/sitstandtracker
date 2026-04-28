@@ -159,8 +159,19 @@ struct ContentView: View {
                 .font(.title3.weight(.bold))
 
             VStack(alignment: .leading, spacing: 12) {
-                goalLine(value: "\(trackerStore.preferences.targetStandingBlockMinutes)", label: "minutes standing")
-                goalLine(value: "\(trackerStore.preferences.targetSittingBlockMinutes)", label: "minutes sitting")
+                compactPreferenceStepper(
+                    title: "Stand",
+                    value: trackerStore.preferences.targetStandingBlockMinutes,
+                    binding: standingMinutesBinding,
+                    range: 1...240
+                )
+
+                compactPreferenceStepper(
+                    title: "After sitting",
+                    value: trackerStore.preferences.targetSittingBlockMinutes,
+                    binding: sittingMinutesBinding,
+                    range: 1...240
+                )
             }
 
             Divider()
@@ -242,12 +253,46 @@ struct ContentView: View {
 
     private var settingsPage: some View {
         VStack(alignment: .leading, spacing: 22) {
-            pageHeader(title: "Settings", subtitle: "Current cycle")
+            pageHeader(title: "Settings", subtitle: "Work cycle")
 
             VStack(alignment: .leading, spacing: 18) {
-                settingRow(title: "Stand for", value: "\(trackerStore.preferences.targetStandingBlockMinutes) min", symbolName: "figure.stand")
-                settingRow(title: "After sitting for", value: "\(trackerStore.preferences.targetSittingBlockMinutes) min", symbolName: "chair.lounge.fill")
-                settingRow(title: "Default snooze", value: "\(trackerStore.preferences.defaultSnoozeMinutes) min", symbolName: "moon.zzz.fill")
+                preferenceStepperRow(
+                    title: "Stand for",
+                    value: trackerStore.preferences.targetStandingBlockMinutes,
+                    symbolName: "figure.stand",
+                    binding: standingMinutesBinding,
+                    range: 1...240,
+                    step: 5
+                )
+
+                preferenceStepperRow(
+                    title: "After sitting for",
+                    value: trackerStore.preferences.targetSittingBlockMinutes,
+                    symbolName: "chair.lounge.fill",
+                    binding: sittingMinutesBinding,
+                    range: 1...240,
+                    step: 5
+                )
+
+                preferenceStepperRow(
+                    title: "Default snooze",
+                    value: trackerStore.preferences.defaultSnoozeMinutes,
+                    symbolName: "moon.zzz.fill",
+                    binding: snoozeMinutesBinding,
+                    range: 1...60,
+                    step: 1
+                )
+
+                HStack {
+                    Text("Target ratio")
+                        .font(.headline)
+
+                    Spacer()
+
+                    Text(trackerStore.targetRatioText)
+                        .font(.headline.monospacedDigit())
+                        .foregroundStyle(.secondary)
+                }
 
                 Divider()
 
@@ -395,15 +440,22 @@ struct ContentView: View {
         }
     }
 
-    private func goalLine(value: String, label: String) -> some View {
-        HStack(alignment: .firstTextBaseline, spacing: 8) {
-            Text(value)
-                .font(.system(size: 28, weight: .bold, design: .rounded))
-                .monospacedDigit()
+    private func compactPreferenceStepper(
+        title: String,
+        value: Int,
+        binding: Binding<Int>,
+        range: ClosedRange<Int>
+    ) -> some View {
+        Stepper(value: binding, in: range, step: 5) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.secondary)
 
-            Text(label)
-                .font(.subheadline.weight(.medium))
-                .foregroundStyle(.secondary)
+                Text("\(value) min")
+                    .font(.system(size: 26, weight: .bold, design: .rounded))
+                    .monospacedDigit()
+            }
         }
     }
 
@@ -465,21 +517,30 @@ struct ContentView: View {
         .background(Color.white.opacity(0.62), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
     }
 
-    private func settingRow(title: String, value: String, symbolName: String) -> some View {
-        HStack(spacing: 12) {
-            Image(systemName: symbolName)
-                .font(.headline)
-                .foregroundStyle(Color.accentColor)
-                .frame(width: 28)
+    private func preferenceStepperRow(
+        title: String,
+        value: Int,
+        symbolName: String,
+        binding: Binding<Int>,
+        range: ClosedRange<Int>,
+        step: Int
+    ) -> some View {
+        Stepper(value: binding, in: range, step: step) {
+            HStack(spacing: 12) {
+                Image(systemName: symbolName)
+                    .font(.headline)
+                    .foregroundStyle(Color.accentColor)
+                    .frame(width: 28)
 
-            Text(title)
-                .font(.headline)
+                Text(title)
+                    .font(.headline)
 
-            Spacer()
+                Spacer()
 
-            Text(value)
-                .font(.headline.monospacedDigit())
-                .foregroundStyle(.secondary)
+                Text("\(value) min")
+                    .font(.headline.monospacedDigit())
+                    .foregroundStyle(.secondary)
+            }
         }
     }
 
@@ -498,6 +559,45 @@ struct ContentView: View {
         } else {
             trackerStore.stopTracking()
         }
+    }
+
+    private var standingMinutesBinding: Binding<Int> {
+        Binding(
+            get: { trackerStore.preferences.targetStandingBlockMinutes },
+            set: { newValue in
+                trackerStore.updatePreferences(
+                    targetStandingBlockMinutes: newValue,
+                    targetSittingBlockMinutes: trackerStore.preferences.targetSittingBlockMinutes,
+                    defaultSnoozeMinutes: trackerStore.preferences.defaultSnoozeMinutes
+                )
+            }
+        )
+    }
+
+    private var sittingMinutesBinding: Binding<Int> {
+        Binding(
+            get: { trackerStore.preferences.targetSittingBlockMinutes },
+            set: { newValue in
+                trackerStore.updatePreferences(
+                    targetStandingBlockMinutes: trackerStore.preferences.targetStandingBlockMinutes,
+                    targetSittingBlockMinutes: newValue,
+                    defaultSnoozeMinutes: trackerStore.preferences.defaultSnoozeMinutes
+                )
+            }
+        )
+    }
+
+    private var snoozeMinutesBinding: Binding<Int> {
+        Binding(
+            get: { trackerStore.preferences.defaultSnoozeMinutes },
+            set: { newValue in
+                trackerStore.updatePreferences(
+                    targetStandingBlockMinutes: trackerStore.preferences.targetStandingBlockMinutes,
+                    targetSittingBlockMinutes: trackerStore.preferences.targetSittingBlockMinutes,
+                    defaultSnoozeMinutes: newValue
+                )
+            }
+        )
     }
 
     private var statusText: String {

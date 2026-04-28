@@ -143,6 +143,8 @@ Acceptance criteria:
 
 ## Phase 3: Settings And Preferences Editing
 
+Status: Completed on 2026-04-28. See `PHASE-3-HANDOFF.md` for details on what was implemented and what remains incomplete.
+
 Goal: let the user edit the work-cycle pair that drives ratios and later alerts.
 
 Likely files:
