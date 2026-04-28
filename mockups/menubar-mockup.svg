@@ -1,0 +1,116 @@
+<svg width="960" height="1020" viewBox="0 0 960 1020" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="desktop" x1="74" y1="48" x2="856" y2="946" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E8F4EF"/>
+      <stop offset="0.56" stop-color="#EAF0F8"/>
+      <stop offset="1" stop-color="#F7EFE6"/>
+    </linearGradient>
+    <linearGradient id="menu" x1="602" y1="126" x2="602" y2="822" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FCFDFE"/>
+      <stop offset="1" stop-color="#F4F7FB"/>
+    </linearGradient>
+    <linearGradient id="status" x1="398" y1="100" x2="620" y2="100" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#163E61"/>
+      <stop offset="1" stop-color="#327D78"/>
+    </linearGradient>
+    <linearGradient id="active" x1="404" y1="324" x2="800" y2="440" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#184A73"/>
+      <stop offset="1" stop-color="#2F8773"/>
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="960" height="1020" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="22" stdDeviation="30" flood-color="#16314F" flood-opacity="0.14"/>
+    </filter>
+    <filter id="soft" x="0" y="0" width="960" height="1020" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="10" stdDeviation="16" flood-color="#18324E" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+
+  <rect width="960" height="1020" fill="url(#desktop)"/>
+  <rect width="960" height="52" fill="#F4F7FB" fill-opacity="0.8"/>
+  <text x="64" y="33" fill="#8A95A4" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="19" font-weight="600">Finder</text>
+  <text x="118" y="33" fill="#8A95A4" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="19">File</text>
+  <text x="156" y="33" fill="#8A95A4" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="19">Edit</text>
+
+  <rect x="624" y="16" width="168" height="26" rx="13" fill="url(#status)"/>
+  <text x="708" y="34" text-anchor="middle" fill="white" font-family="SF Mono, Menlo, monospace" font-size="16" font-weight="700">stand 01:24</text>
+  <circle cx="646" cy="29" r="6" fill="#C9F0E0"/>
+  <text x="830" y="33" fill="#657283" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="19">Tue Apr 28  3:42 PM</text>
+
+  <circle cx="128" cy="904" r="180" fill="#FFFFFF" fill-opacity="0.28"/>
+  <circle cx="874" cy="140" r="120" fill="#FFFFFF" fill-opacity="0.28"/>
+
+  <g filter="url(#shadow)">
+    <rect x="384" y="84" width="436" height="740" rx="26" fill="url(#menu)"/>
+  </g>
+
+  <path d="M682 84L708 56L734 84H682Z" fill="#FCFDFE"/>
+
+  <text x="416" y="134" fill="#172536" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="29" font-weight="700">SitStandTracker</text>
+  <text x="416" y="164" fill="#6B7787" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="17">Quick posture controls without opening the dashboard.</text>
+
+  <g filter="url(#soft)">
+    <rect x="404" y="192" width="396" height="108" rx="24" fill="url(#active)"/>
+  </g>
+  <text x="432" y="228" fill="#D8EFE9" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="16" font-weight="600">Current posture</text>
+  <text x="432" y="266" fill="white" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="34" font-weight="700">Standing</text>
+  <text x="652" y="266" fill="white" font-family="SF Mono, Menlo, monospace" font-size="29" font-weight="700">01:24:18</text>
+  <text x="432" y="289" fill="#DCECF6" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="17">Today: 03:12 sitting   04:46 standing</text>
+
+  <text x="404" y="346" fill="#172536" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="22" font-weight="700">Quick actions</text>
+
+  <g filter="url(#soft)">
+    <rect x="404" y="364" width="396" height="74" rx="22" fill="#EEF4FB"/>
+  </g>
+  <text x="432" y="395" fill="#6E7B8A" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="16" font-weight="600">Switch posture</text>
+  <text x="432" y="420" fill="#182636" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="28" font-weight="700">Sitting</text>
+  <rect x="688" y="386" width="88" height="30" rx="15" fill="#DDE8F7"/>
+  <text x="732" y="406" text-anchor="middle" fill="#2A507A" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="15" font-weight="700">Start</text>
+
+  <g filter="url(#soft)">
+    <rect x="404" y="450" width="396" height="74" rx="22" fill="#E8F5F0"/>
+  </g>
+  <text x="432" y="481" fill="#5A7C70" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="16" font-weight="600">Active now</text>
+  <text x="432" y="506" fill="#17332C" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="28" font-weight="700">Standing</text>
+  <rect x="680" y="472" width="96" height="30" rx="15" fill="#BDE4D4"/>
+  <text x="728" y="492" text-anchor="middle" fill="#195A4A" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="15" font-weight="700">Selected</text>
+
+  <g filter="url(#soft)">
+    <rect x="404" y="536" width="396" height="74" rx="22" fill="#F3F6FA"/>
+  </g>
+  <text x="432" y="567" fill="#6E7B8A" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="16" font-weight="600">Session control</text>
+  <text x="432" y="592" fill="#182636" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="28" font-weight="700">Stop tracking</text>
+  <rect x="690" y="558" width="86" height="30" rx="15" fill="#E5EBF3"/>
+  <text x="733" y="578" text-anchor="middle" fill="#324A63" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="15" font-weight="700">Stop</text>
+
+  <line x1="404" y1="646" x2="800" y2="646" stroke="#E0E7F0"/>
+
+  <text x="404" y="684" fill="#172536" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="22" font-weight="700">App</text>
+
+  <g filter="url(#soft)">
+    <rect x="404" y="704" width="396" height="54" rx="18" fill="#FFFFFF"/>
+  </g>
+  <text x="432" y="738" fill="#172536" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="20" font-weight="600">Open Dashboard</text>
+
+  <g filter="url(#soft)">
+    <rect x="404" y="770" width="396" height="54" rx="18" fill="#FFFFFF"/>
+  </g>
+  <text x="432" y="804" fill="#8A2E2E" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="20" font-weight="600">Quit</text>
+
+  <text x="76" y="150" fill="#182534" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="30" font-weight="700">Hybrid app concept</text>
+  <text x="76" y="188" fill="#6E7B8A" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18">The menu bar stays compact while the dropdown carries the key daily context.</text>
+
+  <g filter="url(#soft)">
+    <rect x="76" y="256" width="244" height="224" rx="28" fill="#FAFCFE"/>
+  </g>
+  <text x="104" y="302" fill="#182534" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="24" font-weight="700">Why this works</text>
+  <text x="104" y="344" fill="#5F6D7D" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18">Glanceable timer</text>
+  <text x="104" y="380" fill="#5F6D7D" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18">One-click switching</text>
+  <text x="104" y="416" fill="#5F6D7D" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18">Tracking continues if the window closes</text>
+
+  <g filter="url(#soft)">
+    <rect x="76" y="520" width="244" height="164" rx="28" fill="#173C5E"/>
+  </g>
+  <text x="104" y="564" fill="#CFE4EF" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="16" font-weight="600">Recommended MVP</text>
+  <text x="104" y="606" fill="white" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="30" font-weight="700">Dock icon hides on close</text>
+  <text x="104" y="646" fill="#D8E7F0" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18">Simple mental model, easier reopen flow.</text>
+</svg>

@@ -1,0 +1,106 @@
+<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="shadow" x="0" y="0" width="1440" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#16253B" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <rect width="1440" height="900" rx="18" fill="#F5F6FB"/>
+  <rect x="2" y="2" width="1436" height="896" rx="16" stroke="#DCE3F0" stroke-width="2"/>
+
+  <rect x="0" y="0" width="290" height="900" rx="18" fill="#F7F7FC"/>
+  <line x1="290.5" y1="0" x2="290.5" y2="900" stroke="#E0E5F0"/>
+
+  <text x="32" y="62" fill="#20242D" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="36" font-weight="700">Tracker</text>
+  <text x="32" y="92" fill="#8A8F9C" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="20">Productive Session</text>
+
+  <rect x="24" y="140" width="240" height="46" rx="12" fill="#FFFFFF"/>
+  <text x="72" y="171" fill="#32C48D" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18" font-weight="700">Dashboard</text>
+  <rect x="38" y="153" width="16" height="16" rx="3" stroke="#32C48D" stroke-width="2"/>
+  <path d="M46 153V169M38 161H54" stroke="#32C48D" stroke-width="2"/>
+
+  <text x="72" y="236" fill="#5C6270" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18" font-weight="600">Analytics</text>
+  <text x="72" y="288" fill="#5C6270" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18" font-weight="600">History</text>
+  <text x="72" y="340" fill="#5C6270" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18" font-weight="600">Settings</text>
+  <rect x="40" y="221" width="12" height="12" fill="#5C6270"/>
+  <circle cx="46" cy="282" r="10" stroke="#5C6270" stroke-width="2"/>
+  <circle cx="46" cy="334" r="10" stroke="#5C6270" stroke-width="2"/>
+  <path d="M46 326V342M38 334H54" stroke="#5C6270" stroke-width="2"/>
+
+  <g filter="url(#shadow)">
+    <rect x="356" y="30" width="664" height="364" rx="20" fill="#FFFFFF"/>
+  </g>
+  <rect x="356.5" y="30.5" width="663" height="363" rx="19.5" stroke="#D8DFEA"/>
+  <text x="388" y="88" fill="#2A2F39" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="34" font-weight="700">Current Status</text>
+  <circle cx="392" cy="118" r="5" fill="#4FD2A4"/>
+  <text x="408" y="124" fill="#4FD2A4" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="20" font-weight="700">Standing</text>
+  <circle cx="962" cy="86" r="20" fill="#F6F7FB" stroke="#E1E6F0"/>
+  <path d="M962 75V80M962 92V97M951 86H956M968 86H973" stroke="#626B78" stroke-width="2.5" stroke-linecap="round"/>
+  <text x="688" y="208" text-anchor="middle" fill="#161A22" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="78" font-weight="700">45:20</text>
+  <text x="688" y="248" text-anchor="middle" fill="#858B97" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="22">Target ratio: 1 stand / 3 sit</text>
+
+  <rect x="502" y="304" width="224" height="56" rx="28" fill="#34C98E"/>
+  <text x="614" y="340" text-anchor="middle" fill="white" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="22" font-weight="700">Switch to Sitting</text>
+  <rect x="742" y="304" width="150" height="56" rx="28" fill="#F3F4F8"/>
+  <text x="817" y="340" text-anchor="middle" fill="#323844" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="22" font-weight="700">Stop</text>
+
+  <g filter="url(#shadow)">
+    <rect x="1038" y="30" width="320" height="364" rx="20" fill="#FFFFFF"/>
+  </g>
+  <rect x="1038.5" y="30.5" width="319" height="363" rx="19.5" stroke="#D8DFEA"/>
+  <text x="1070" y="88" fill="#2A2F39" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="34" font-weight="700">Daily Goal</text>
+  <text x="1070" y="176" fill="#2E333C" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="22" font-weight="600">Stand for</text>
+  <rect x="1184" y="148" width="74" height="42" rx="8" fill="#FFFFFF" stroke="#D6DCE8"/>
+  <text x="1221" y="177" text-anchor="middle" fill="#6B7381" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="22" font-weight="700">15</text>
+  <text x="1272" y="176" fill="#8B919D" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="22">minutes</text>
+  <text x="1070" y="252" fill="#2E333C" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="22" font-weight="600">after</text>
+  <rect x="1184" y="224" width="74" height="42" rx="8" fill="#FFFFFF" stroke="#D6DCE8"/>
+  <text x="1221" y="253" text-anchor="middle" fill="#6B7381" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="22" font-weight="700">45</text>
+  <text x="1270" y="240" fill="#8B919D" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="22">minutes</text>
+  <text x="1070" y="316" fill="#6B7381" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="20">Derived target ratio: 1 stand / 3 sit</text>
+
+  <g filter="url(#shadow)">
+    <rect x="356" y="414" width="240" height="92" rx="16" fill="#FFFFFF"/>
+    <rect x="616" y="414" width="240" height="92" rx="16" fill="#FFFFFF"/>
+    <rect x="876" y="414" width="240" height="92" rx="16" fill="#FFFFFF"/>
+    <rect x="1136" y="414" width="222" height="92" rx="16" fill="#FFFFFF"/>
+  </g>
+  <rect x="356.5" y="414.5" width="239" height="91" rx="15.5" stroke="#D8DFEA"/>
+  <rect x="616.5" y="414.5" width="239" height="91" rx="15.5" stroke="#D8DFEA"/>
+  <rect x="876.5" y="414.5" width="239" height="91" rx="15.5" stroke="#D8DFEA"/>
+  <rect x="1136.5" y="414.5" width="221" height="91" rx="15.5" stroke="#D8DFEA"/>
+  <text x="380" y="448" fill="#6D7380" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="15" font-weight="700">SIT STREAK</text>
+  <text x="380" y="485" fill="#20242D" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="36" font-weight="700">52m</text>
+  <text x="640" y="448" fill="#6D7380" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="15" font-weight="700">AVG SIT</text>
+  <text x="640" y="485" fill="#20242D" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="36" font-weight="700">42m</text>
+  <text x="900" y="448" fill="#6D7380" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="15" font-weight="700">AVG STAND</text>
+  <text x="900" y="485" fill="#20242D" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="36" font-weight="700">55m</text>
+  <text x="1160" y="448" fill="#6D7380" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="15" font-weight="700">STAND STREAK</text>
+  <text x="1160" y="485" fill="#20242D" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="36" font-weight="700">19m</text>
+
+  <g filter="url(#shadow)">
+    <rect x="356" y="528" width="1002" height="264" rx="18" fill="#FFFFFF"/>
+  </g>
+  <rect x="356.5" y="528.5" width="1001" height="263" rx="17.5" stroke="#D8DFEA"/>
+  <text x="378" y="570" fill="#2A2F39" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="32" font-weight="700">Recent Activity</text>
+  <text x="1308" y="570" text-anchor="end" fill="#34C98E" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="20" font-weight="700">View All</text>
+
+  <line x1="356" y1="596.5" x2="1358" y2="596.5" stroke="#E5E9F1"/>
+  <line x1="356" y1="660.5" x2="1358" y2="660.5" stroke="#E5E9F1"/>
+  <line x1="356" y1="724.5" x2="1358" y2="724.5" stroke="#E5E9F1"/>
+
+  <circle cx="396" cy="628" r="15" fill="#F2F3F7"/>
+  <text x="428" y="620" fill="#2B313B" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="24" font-weight="700">Sitting</text>
+  <text x="428" y="649" fill="#707785" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18">10:15 AM - 11:00 AM</text>
+  <text x="1310" y="637" text-anchor="end" fill="#404651" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="24" font-weight="600">45m</text>
+
+  <circle cx="396" cy="692" r="15" fill="#DFF7EC"/>
+  <text x="428" y="684" fill="#2B313B" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="24" font-weight="700">Standing</text>
+  <text x="428" y="713" fill="#707785" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18">09:00 AM - 10:15 AM</text>
+  <text x="1310" y="701" text-anchor="end" fill="#404651" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="24" font-weight="600">1h 15m</text>
+
+  <circle cx="396" cy="756" r="15" fill="#F2F3F7"/>
+  <text x="428" y="748" fill="#2B313B" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="24" font-weight="700">Sitting</text>
+  <text x="428" y="777" fill="#707785" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18">08:20 AM - 08:45 AM</text>
+  <text x="1310" y="765" text-anchor="end" fill="#404651" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="24" font-weight="600">25m</text>
+</svg>

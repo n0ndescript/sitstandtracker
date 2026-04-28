@@ -1,0 +1,47 @@
+<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="shadow" x="0" y="0" width="1440" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#16253B" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+  <rect width="1440" height="900" rx="18" fill="#F5F6FB"/>
+  <rect x="0" y="0" width="290" height="900" rx="18" fill="#F7F7FC"/>
+  <line x1="290.5" y1="0" x2="290.5" y2="900" stroke="#E0E5F0"/>
+  <text x="32" y="62" fill="#20242D" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="36" font-weight="700">Tracker</text>
+  <text x="32" y="92" fill="#8A8F9C" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="20">Productive Session</text>
+  <text x="72" y="171" fill="#5C6270" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18" font-weight="600">Dashboard</text>
+  <rect x="24" y="212" width="240" height="46" rx="12" fill="#FFFFFF"/>
+  <text x="72" y="243" fill="#32C48D" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18" font-weight="700">History</text>
+  <text x="72" y="295" fill="#5C6270" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18" font-weight="600">Analytics</text>
+  <text x="72" y="347" fill="#5C6270" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18" font-weight="600">Settings</text>
+  <text x="356" y="72" fill="#20242D" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="42" font-weight="700">History</text>
+  <text x="356" y="108" fill="#7A8190" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="20">Review daily posture balance and revisit individual session timelines.</text>
+  <g filter="url(#shadow)">
+    <rect x="356" y="148" width="996" height="160" rx="18" fill="#FFFFFF"/>
+  </g>
+  <text x="388" y="194" fill="#2A2F39" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="28" font-weight="700">Today</text>
+  <rect x="1182" y="172" width="126" height="34" rx="17" fill="#E7F7EF"/>
+  <text x="1245" y="194" text-anchor="middle" fill="#2E966F" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="16" font-weight="700">Met</text>
+  <text x="388" y="236" fill="#5F6675" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18">Sit 3h 42m</text>
+  <text x="568" y="236" fill="#5F6675" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18">Stand 1h 18m</text>
+  <text x="748" y="236" fill="#5F6675" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18">Target 1:3</text>
+  <text x="888" y="236" fill="#5F6675" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18">Actual 26% stand</text>
+  <line x1="356" y1="256.5" x2="1352" y2="256.5" stroke="#E5E9F1"/>
+  <text x="388" y="290" fill="#252B35" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="20" font-weight="700">Standing</text>
+  <text x="544" y="290" fill="#707785" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18">09:00 AM - 10:15 AM</text>
+  <text x="1298" y="290" text-anchor="end" fill="#404651" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="20" font-weight="600">1h 15m</text>
+  <g filter="url(#shadow)">
+    <rect x="356" y="336" width="996" height="128" rx="18" fill="#FFFFFF"/>
+  </g>
+  <rect x="388" y="360" width="142" height="34" rx="17" fill="#EAF0FF"/>
+  <text x="459" y="382" text-anchor="middle" fill="#3767D6" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="16" font-weight="700">Exceeded</text>
+  <text x="388" y="428" fill="#252B35" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="26" font-weight="700">Monday, April 27</text>
+  <text x="844" y="428" fill="#5F6675" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18">Stand share 37% vs target 25%</text>
+  <g filter="url(#shadow)">
+    <rect x="356" y="492" width="996" height="128" rx="18" fill="#FFFFFF"/>
+  </g>
+  <rect x="388" y="516" width="138" height="34" rx="17" fill="#FFF4E6"/>
+  <text x="457" y="538" text-anchor="middle" fill="#C47A22" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="16" font-weight="700">Not Met</text>
+  <text x="388" y="584" fill="#252B35" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="26" font-weight="700">Sunday, April 26</text>
+  <text x="844" y="584" fill="#5F6675" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18">Stand share 16% vs target 25%</text>
+</svg>

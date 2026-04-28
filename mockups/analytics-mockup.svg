@@ -1,0 +1,58 @@
+<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="shadow" x="0" y="0" width="1440" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#16253B" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+  <rect width="1440" height="900" rx="18" fill="#F5F6FB"/>
+  <rect x="0" y="0" width="290" height="900" rx="18" fill="#F7F7FC"/>
+  <line x1="290.5" y1="0" x2="290.5" y2="900" stroke="#E0E5F0"/>
+  <text x="32" y="62" fill="#20242D" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="36" font-weight="700">Tracker</text>
+  <text x="32" y="92" fill="#8A8F9C" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="20">Productive Session</text>
+  <text x="72" y="171" fill="#5C6270" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18" font-weight="600">Dashboard</text>
+  <text x="72" y="243" fill="#5C6270" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18" font-weight="600">History</text>
+  <rect x="24" y="264" width="240" height="46" rx="12" fill="#FFFFFF"/>
+  <text x="72" y="295" fill="#32C48D" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18" font-weight="700">Analytics</text>
+  <text x="72" y="347" fill="#5C6270" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18" font-weight="600">Settings</text>
+  <text x="356" y="72" fill="#20242D" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="42" font-weight="700">Analytics</text>
+  <text x="356" y="108" fill="#7A8190" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="20">Track ratio adherence over time without turning the app into a noisy fitness dashboard.</text>
+  <g filter="url(#shadow)">
+    <rect x="356" y="148" width="996" height="360" rx="18" fill="#FFFFFF"/>
+  </g>
+  <text x="388" y="194" fill="#2A2F39" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="28" font-weight="700">Last 7 Days</text>
+  <text x="388" y="228" fill="#7A8190" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="18">Stacked active-time bars with target standing share reference.</text>
+  <line x1="430" y1="442.5" x2="1288" y2="442.5" stroke="#E6EAF2"/>
+  <line x1="430" y1="350.5" x2="1288" y2="350.5" stroke="#E6EAF2"/>
+  <line x1="430" y1="258.5" x2="1288" y2="258.5" stroke="#E6EAF2"/>
+  <line x1="430" y1="442.5" x2="430" y2="250" stroke="#C7D0DE"/>
+  <rect x="468" y="350" width="34" height="92" rx="8" fill="#2F87E2"/>
+  <rect x="468" y="270" width="34" height="80" rx="8" fill="#DDE7F8"/>
+  <rect x="592" y="330" width="34" height="112" rx="8" fill="#2F87E2"/>
+  <rect x="592" y="272" width="34" height="58" rx="8" fill="#DDE7F8"/>
+  <rect x="716" y="372" width="34" height="70" rx="8" fill="#2F87E2"/>
+  <rect x="716" y="282" width="34" height="90" rx="8" fill="#DDE7F8"/>
+  <rect x="840" y="320" width="34" height="122" rx="8" fill="#2F87E2"/>
+  <rect x="840" y="272" width="34" height="48" rx="8" fill="#DDE7F8"/>
+  <rect x="964" y="360" width="34" height="82" rx="8" fill="#2F87E2"/>
+  <rect x="964" y="285" width="34" height="75" rx="8" fill="#DDE7F8"/>
+  <rect x="1088" y="340" width="34" height="102" rx="8" fill="#2F87E2"/>
+  <rect x="1088" y="276" width="34" height="64" rx="8" fill="#DDE7F8"/>
+  <rect x="1212" y="352" width="34" height="90" rx="8" fill="#2F87E2"/>
+  <rect x="1212" y="280" width="34" height="72" rx="8" fill="#DDE7F8"/>
+  <line x1="430" y1="302.5" x2="1288" y2="302.5" stroke="#36B37E" stroke-width="3" stroke-dasharray="8 8"/>
+  <text x="1296" y="307" fill="#36B37E" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="16" font-weight="700">25% target stand share</text>
+  <g filter="url(#shadow)">
+    <rect x="356" y="536" width="238" height="140" rx="18" fill="#FFFFFF"/>
+    <rect x="612" y="536" width="238" height="140" rx="18" fill="#FFFFFF"/>
+    <rect x="868" y="536" width="238" height="140" rx="18" fill="#FFFFFF"/>
+    <rect x="1124" y="536" width="228" height="140" rx="18" fill="#FFFFFF"/>
+  </g>
+  <text x="388" y="576" fill="#6D7380" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="15" font-weight="700">GOAL STATUS</text>
+  <text x="388" y="620" fill="#20242D" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="28" font-weight="700">4 met / 2 exceeded / 1 not met</text>
+  <text x="644" y="576" fill="#6D7380" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="15" font-weight="700">AVG ACTIVE TIME</text>
+  <text x="644" y="620" fill="#20242D" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="28" font-weight="700">5h 18m</text>
+  <text x="900" y="576" fill="#6D7380" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="15" font-weight="700">AVG SIT SESSION</text>
+  <text x="900" y="620" fill="#20242D" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="28" font-weight="700">43m</text>
+  <text x="1156" y="576" fill="#6D7380" font-family="SF Pro Text, Helvetica, Arial, sans-serif" font-size="15" font-weight="700">AVG STAND SESSION</text>
+  <text x="1156" y="620" fill="#20242D" font-family="SF Pro Display, Helvetica, Arial, sans-serif" font-size="28" font-weight="700">16m</text>
+</svg>
