@@ -205,6 +205,8 @@ Acceptance criteria:
 
 ## Phase 5: Analytics Page
 
+Status: Completed on 2026-04-28. See `PHASE-5-HANDOFF.md` for details on what was implemented and what remains incomplete.
+
 Goal: add a narrow, useful analytics view for recent ratio behavior.
 
 Likely files:

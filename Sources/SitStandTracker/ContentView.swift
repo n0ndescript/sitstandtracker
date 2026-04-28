@@ -248,19 +248,34 @@ struct ContentView: View {
     }
 
     private var analyticsPage: some View {
-        VStack(alignment: .leading, spacing: 22) {
-            pageHeader(title: "Analytics", subtitle: "Today")
+        let analytics = trackerStore.sevenDayAnalytics
+
+        return VStack(alignment: .leading, spacing: 22) {
+            pageHeader(title: "Analytics", subtitle: "Last 7 days")
 
             VStack(alignment: .leading, spacing: 16) {
-                Text("Today")
+                Text("Recent Ratio")
                     .font(.title2.weight(.bold))
 
-                ratioBar
+                recentDaysChart(for: analytics.days)
+            }
+            .panelStyle()
+
+            HStack(spacing: 14) {
+                analyticsTile(title: "Avg Tracked", value: analytics.averageActiveTrackedDuration.formattedShortDuration)
+                analyticsTile(title: "Avg Sit", value: analytics.averageSitDuration.formattedShortDuration)
+                analyticsTile(title: "Avg Stand", value: analytics.averageStandDuration.formattedShortDuration)
+            }
+
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Goal Status")
+                    .font(.title2.weight(.bold))
 
                 HStack(spacing: 14) {
-                    analyticsTile(title: "Tracked", value: trackerStore.todaySummary.totalDuration.formattedShortDuration)
-                    analyticsTile(title: "Standing Share", value: "\(Int((trackerStore.todaySummary.percentage(for: .standing) * 100).rounded()))%")
-                    analyticsTile(title: "Status", value: trackerStore.todaySummary.goalStatus.title)
+                    analyticsStatusTile(title: "Met", value: analytics.metCount, status: .met)
+                    analyticsStatusTile(title: "Exceeded", value: analytics.exceededCount, status: .exceeded)
+                    analyticsStatusTile(title: "Not Met", value: analytics.notMetCount, status: .notMet)
+                    analyticsStatusTile(title: "Low Data", value: analytics.insufficientDataCount, status: .insufficientData)
                 }
             }
             .panelStyle()
@@ -440,6 +455,57 @@ struct ContentView: View {
         }
     }
 
+    private func recentDaysChart(for days: [DayHistory]) -> some View {
+        let maxDuration = max(days.map(\.summary.totalDuration).max() ?? 0, 1)
+
+        return VStack(spacing: 12) {
+            ForEach(days) { day in
+                analyticsDayRow(day, maxDuration: maxDuration)
+            }
+        }
+    }
+
+    private func analyticsDayRow(_ day: DayHistory, maxDuration: TimeInterval) -> some View {
+        let sittingWidth = day.summary.sittingDuration / maxDuration
+        let standingWidth = day.summary.standingDuration / maxDuration
+        let standingShare = Int((day.summary.percentage(for: .standing) * 100).rounded())
+
+        return HStack(spacing: 12) {
+            Text(shortDayLabel(for: day.date))
+                .font(.subheadline.weight(.semibold))
+                .frame(width: 46, alignment: .leading)
+
+            GeometryReader { geometry in
+                HStack(spacing: 0) {
+                    Rectangle()
+                        .fill(Color(red: 0.20, green: 0.39, blue: 0.63))
+                        .frame(width: geometry.size.width * sittingWidth)
+
+                    Rectangle()
+                        .fill(Color(red: 0.16, green: 0.50, blue: 0.37))
+                        .frame(width: geometry.size.width * standingWidth)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.black.opacity(0.08))
+                .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+            }
+            .frame(height: 18)
+
+            Text(day.summary.totalDuration.formattedShortDuration)
+                .font(.subheadline.monospacedDigit())
+                .foregroundStyle(.secondary)
+                .frame(width: 58, alignment: .trailing)
+
+            Text("\(standingShare)%")
+                .font(.subheadline.monospacedDigit())
+                .foregroundStyle(.secondary)
+                .frame(width: 42, alignment: .trailing)
+
+            statusBadge(for: day.summary.goalStatus)
+                .frame(width: 116, alignment: .trailing)
+        }
+    }
+
     @ViewBuilder
     private func sessionList(limit: Int?) -> some View {
         let sessions = limit.map { Array(trackerStore.todaySessions.prefix($0)) } ?? trackerStore.todaySessions
@@ -613,6 +679,22 @@ struct ContentView: View {
         .background(Color.white.opacity(0.62), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
     }
 
+    private func analyticsStatusTile(title: String, value: Int, status: GoalStatus) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.secondary)
+
+            Text("\(value)")
+                .font(.system(size: 30, weight: .bold, design: .rounded))
+                .monospacedDigit()
+                .foregroundStyle(status.tint)
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(status.tint.opacity(0.10), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+    }
+
     private func dayMetric(title: String, value: String, symbolName: String) -> some View {
         HStack(spacing: 10) {
             Image(systemName: symbolName)
@@ -698,6 +780,14 @@ struct ContentView: View {
         }
 
         return date.formatted(date: .abbreviated, time: .omitted)
+    }
+
+    private func shortDayLabel(for date: Date) -> String {
+        if Calendar.current.isDateInToday(date) {
+            return "Today"
+        }
+
+        return date.formatted(.dateTime.weekday(.abbreviated))
     }
 
     private var standingMinutesBinding: Binding<Int> {

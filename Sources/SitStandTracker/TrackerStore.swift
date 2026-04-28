@@ -271,6 +271,17 @@ struct DayHistory: Identifiable {
     let sessions: [TrackingSession]
 }
 
+struct AnalyticsSummary {
+    let days: [DayHistory]
+    let metCount: Int
+    let exceededCount: Int
+    let notMetCount: Int
+    let insufficientDataCount: Int
+    let averageActiveTrackedDuration: TimeInterval
+    let averageSitDuration: TimeInterval
+    let averageStandDuration: TimeInterval
+}
+
 @Observable
 final class TrackerStore {
     private enum StorageKeys {
@@ -341,6 +352,10 @@ final class TrackerStore {
                     sessions: sessions(for: dayStart, calendar: calendar)
                 )
             }
+    }
+
+    var sevenDayAnalytics: AnalyticsSummary {
+        analyticsSummaryForRecentDays(count: 7)
     }
 
     func tick() {
@@ -420,6 +435,43 @@ final class TrackerStore {
         preferences.hasCompletedInitialSetup = true
         preferences.lastUpdatedAt = Date()
         persist()
+    }
+
+    func analyticsSummaryForRecentDays(count: Int) -> AnalyticsSummary {
+        let calendar = Calendar.current
+        let dayCount = max(count, 1)
+        let today = calendar.startOfDay(for: now)
+        let days = (0..<dayCount).compactMap { offset -> DayHistory? in
+            guard let day = calendar.date(byAdding: .day, value: -offset, to: today) else {
+                return nil
+            }
+
+            return DayHistory(
+                id: day,
+                date: day,
+                summary: summary(for: day, calendar: calendar),
+                sessions: sessions(for: day, calendar: calendar)
+            )
+        }
+        .sorted { $0.date < $1.date }
+
+        let averageTracked = average(
+            days.map(\.summary.totalDuration).filter { $0 > 0 }
+        )
+        let completedSessions = days.flatMap(\.sessions)
+        let sittingSessions = completedSessions.filter { $0.posture == .sitting }
+        let standingSessions = completedSessions.filter { $0.posture == .standing }
+
+        return AnalyticsSummary(
+            days: days,
+            metCount: days.count { $0.summary.goalStatus == .met },
+            exceededCount: days.count { $0.summary.goalStatus == .exceeded },
+            notMetCount: days.count { $0.summary.goalStatus == .notMet },
+            insufficientDataCount: days.count { $0.summary.goalStatus == .insufficientData },
+            averageActiveTrackedDuration: averageTracked,
+            averageSitDuration: averageDuration(for: sittingSessions),
+            averageStandDuration: averageDuration(for: standingSessions)
+        )
     }
 
     private func load() {
@@ -523,6 +575,11 @@ final class TrackerStore {
     private func averageDuration(for sessions: [TrackingSession]) -> TimeInterval {
         guard !sessions.isEmpty else { return 0 }
         return sessions.reduce(0) { $0 + $1.duration } / Double(sessions.count)
+    }
+
+    private func average(_ durations: [TimeInterval]) -> TimeInterval {
+        guard !durations.isEmpty else { return 0 }
+        return durations.reduce(0, +) / Double(durations.count)
     }
 
     private func longestDuration(
