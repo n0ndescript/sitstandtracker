@@ -14,7 +14,7 @@ struct SitStandTrackerApp: App {
     @State private var trackerStore = TrackerStore()
 
     var body: some Scene {
-        WindowGroup("SitStandTracker", id: "dashboard") {
+        Window("SitStandTracker", id: "dashboard") {
             ContentView()
                 .environment(trackerStore)
                 .frame(minWidth: 980, minHeight: 680)
