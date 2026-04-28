@@ -52,6 +52,33 @@ enum TrackingState: String, Codable {
 enum AlertKind: String, Codable {
     case timeToStand = "time_to_stand"
     case timeToSit = "time_to_sit"
+
+    var title: String {
+        switch self {
+        case .timeToStand:
+            return "Time to Stand"
+        case .timeToSit:
+            return "Time to Sit"
+        }
+    }
+
+    var recommendedPosture: Posture {
+        switch self {
+        case .timeToStand:
+            return .standing
+        case .timeToSit:
+            return .sitting
+        }
+    }
+
+    var activePosture: Posture {
+        switch self {
+        case .timeToStand:
+            return .sitting
+        case .timeToSit:
+            return .standing
+        }
+    }
 }
 
 struct AlertState: Codable, Equatable {
@@ -333,6 +360,16 @@ final class TrackerStore {
         preferences.targetRatioText
     }
 
+    var activeAlertKind: AlertKind? {
+        guard alertState.isAlertVisible else { return nil }
+        return alertState.currentAlertKind
+    }
+
+    var isAlertSnoozed: Bool {
+        guard let snoozeUntil = alertState.snoozeUntil else { return false }
+        return snoozeUntil > now
+    }
+
     var historyDays: [DayHistory] {
         let calendar = Calendar.current
         var dayStarts = Set(sessions.map { calendar.startOfDay(for: $0.startDate) })
@@ -359,7 +396,9 @@ final class TrackerStore {
     }
 
     func tick() {
-        now = Date()
+        let currentTime = Date()
+        now = currentTime
+        evaluateAlertState(at: currentTime)
     }
 
     func start(posture: Posture) {
@@ -434,7 +473,21 @@ final class TrackerStore {
         preferences.defaultSnoozeMinutes = max(defaultSnoozeMinutes, 1)
         preferences.hasCompletedInitialSetup = true
         preferences.lastUpdatedAt = Date()
+        evaluateAlertState(at: Date(), shouldPersist: false)
         persist()
+    }
+
+    func switchToAlertRecommendation() {
+        guard let alertKind = alertState.currentAlertKind else { return }
+        start(posture: alertKind.recommendedPosture)
+    }
+
+    func snoozeAlert() {
+        postponeAlert(markDismissed: false)
+    }
+
+    func dismissAlert() {
+        postponeAlert(markDismissed: true)
     }
 
     func analyticsSummaryForRecentDays(count: Int) -> AnalyticsSummary {
@@ -503,6 +556,7 @@ final class TrackerStore {
         }
 
         now = Date()
+        evaluateAlertState(at: now, shouldPersist: false)
     }
 
     private func persist() {
@@ -527,6 +581,84 @@ final class TrackerStore {
             defaults.set(encodedActiveSession, forKey: StorageKeys.activeSession)
         } else {
             defaults.removeObject(forKey: StorageKeys.activeSession)
+        }
+    }
+
+    private func evaluateAlertState(at currentTime: Date, shouldPersist: Bool = true) {
+        guard let activeSession else {
+            clearAlertIfNeeded(shouldPersist: shouldPersist)
+            return
+        }
+
+        let expectedAlertKind = alertKind(for: activeSession.posture)
+
+        guard alertState.currentAlertKind == nil || alertState.currentAlertKind == expectedAlertKind else {
+            clearAlertIfNeeded(shouldPersist: shouldPersist)
+            return
+        }
+
+        let elapsed = currentTime.timeIntervalSince(activeSession.startDate)
+        guard elapsed >= thresholdDuration(for: activeSession.posture) else {
+            clearAlertIfNeeded(shouldPersist: shouldPersist)
+            return
+        }
+
+        if let snoozeUntil = alertState.snoozeUntil, snoozeUntil > currentTime {
+            return
+        }
+
+        guard alertState.currentAlertKind != expectedAlertKind || !alertState.isAlertVisible else {
+            return
+        }
+
+        alertState = AlertState(
+            currentAlertKind: expectedAlertKind,
+            alertTriggeredAt: alertState.alertTriggeredAt ?? currentTime,
+            snoozeUntil: nil,
+            lastDismissedAt: alertState.lastDismissedAt,
+            isAlertVisible: true
+        )
+        trackingState = alertTrackingState(for: expectedAlertKind)
+
+        if shouldPersist {
+            persist()
+        }
+    }
+
+    private func postponeAlert(markDismissed: Bool) {
+        guard let alertKind = alertState.currentAlertKind,
+              activeSession?.posture == alertKind.activePosture else {
+            alertState = .inactive
+            persist()
+            return
+        }
+
+        let currentTime = Date()
+        let snoozeUntil = currentTime.addingTimeInterval(TimeInterval(preferences.defaultSnoozeMinutes * 60))
+        alertState = AlertState(
+            currentAlertKind: alertKind,
+            alertTriggeredAt: alertState.alertTriggeredAt ?? currentTime,
+            snoozeUntil: snoozeUntil,
+            lastDismissedAt: markDismissed ? currentTime : alertState.lastDismissedAt,
+            isAlertVisible: false
+        )
+        trackingState = snoozedTrackingState(for: alertKind)
+        now = currentTime
+        persist()
+    }
+
+    private func clearAlertIfNeeded(shouldPersist: Bool) {
+        guard alertState != .inactive else { return }
+        alertState = .inactive
+
+        if let activeSession {
+            trackingState = trackingState(for: activeSession.posture)
+        } else {
+            trackingState = .stopped
+        }
+
+        if shouldPersist {
+            persist()
         }
     }
 
@@ -629,6 +761,42 @@ final class TrackerStore {
             return .activeSitting
         case .standing:
             return .activeStanding
+        }
+    }
+
+    private func alertKind(for posture: Posture) -> AlertKind {
+        switch posture {
+        case .sitting:
+            return .timeToStand
+        case .standing:
+            return .timeToSit
+        }
+    }
+
+    private func thresholdDuration(for posture: Posture) -> TimeInterval {
+        switch posture {
+        case .sitting:
+            return TimeInterval(preferences.targetSittingBlockMinutes * 60)
+        case .standing:
+            return TimeInterval(preferences.targetStandingBlockMinutes * 60)
+        }
+    }
+
+    private func alertTrackingState(for alertKind: AlertKind) -> TrackingState {
+        switch alertKind {
+        case .timeToStand:
+            return .alertTimeToStand
+        case .timeToSit:
+            return .alertTimeToSit
+        }
+    }
+
+    private func snoozedTrackingState(for alertKind: AlertKind) -> TrackingState {
+        switch alertKind {
+        case .timeToStand:
+            return .snoozedSitting
+        case .timeToSit:
+            return .snoozedStanding
         }
     }
 }

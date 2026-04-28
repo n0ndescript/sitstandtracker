@@ -147,11 +147,72 @@ struct ContentView: View {
                 .font(.subheadline.weight(.medium))
                 .foregroundStyle(.secondary)
 
+            alertSurface
             actionButtons
         }
         .padding(24)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color.white.opacity(0.78), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+    }
+
+    @ViewBuilder
+    private var alertSurface: some View {
+        if let alertKind = trackerStore.activeAlertKind {
+            VStack(alignment: .leading, spacing: 14) {
+                HStack(alignment: .top, spacing: 12) {
+                    Image(systemName: alertKind.symbolName)
+                        .font(.title2)
+                        .foregroundStyle(alertKind.tint)
+                        .frame(width: 34, height: 34)
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(alertKind.title)
+                            .font(.headline)
+
+                        Text("You've been \(alertKind.activePosture.title.lowercased()) for \(trackerStore.elapsedInCurrentPosture.formattedShortDuration).")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Spacer()
+                }
+
+                HStack(spacing: 10) {
+                    Button {
+                        trackerStore.switchToAlertRecommendation()
+                    } label: {
+                        Label("Switch to \(alertKind.recommendedPosture.title)", systemImage: alertKind.recommendedPosture.symbolName)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+
+                    Button {
+                        trackerStore.snoozeAlert()
+                    } label: {
+                        Label("+\(trackerStore.preferences.defaultSnoozeMinutes) min", systemImage: "moon.zzz.fill")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered)
+
+                    Button {
+                        trackerStore.dismissAlert()
+                    } label: {
+                        Label("Dismiss", systemImage: "xmark")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered)
+                }
+            }
+            .padding(16)
+            .background(alertKind.tint.opacity(0.12), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        } else if trackerStore.isAlertSnoozed, let snoozeUntil = trackerStore.alertState.snoozeUntil {
+            Label("Alert snoozed until \(snoozeUntil.formatted(date: .omitted, time: .shortened))", systemImage: "moon.zzz.fill")
+                .font(.subheadline.weight(.medium))
+                .foregroundStyle(.secondary)
+                .padding(12)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.white.opacity(0.58), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        }
     }
 
     private var goalCard: some View {
@@ -928,6 +989,26 @@ private extension GoalStatus {
             return Color(red: 0.72, green: 0.43, blue: 0.12)
         case .insufficientData:
             return .secondary
+        }
+    }
+}
+
+private extension AlertKind {
+    var tint: Color {
+        switch self {
+        case .timeToStand:
+            return Color(red: 0.72, green: 0.43, blue: 0.12)
+        case .timeToSit:
+            return Color(red: 0.20, green: 0.39, blue: 0.63)
+        }
+    }
+
+    var symbolName: String {
+        switch self {
+        case .timeToStand:
+            return "figure.stand"
+        case .timeToSit:
+            return "chair.lounge.fill"
         }
     }
 }

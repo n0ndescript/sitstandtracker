@@ -237,6 +237,8 @@ Acceptance criteria:
 
 ## Phase 6: Alert State Engine
 
+Status: Completed on 2026-04-28. See `PHASE-6-HANDOFF.md` for details on what was implemented and what remains incomplete.
+
 Goal: implement threshold evaluation without menu-bar UI first.
 
 Likely files:
