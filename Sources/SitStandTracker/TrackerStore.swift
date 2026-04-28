@@ -264,6 +264,13 @@ struct DaySummary {
     }
 }
 
+struct DayHistory: Identifiable {
+    let id: Date
+    let date: Date
+    let summary: DaySummary
+    let sessions: [TrackingSession]
+}
+
 @Observable
 final class TrackerStore {
     private enum StorageKeys {
@@ -313,6 +320,27 @@ final class TrackerStore {
 
     var targetRatioText: String {
         preferences.targetRatioText
+    }
+
+    var historyDays: [DayHistory] {
+        let calendar = Calendar.current
+        var dayStarts = Set(sessions.map { calendar.startOfDay(for: $0.startDate) })
+        dayStarts.insert(calendar.startOfDay(for: now))
+
+        if let activeSession {
+            dayStarts.insert(calendar.startOfDay(for: activeSession.startDate))
+        }
+
+        return dayStarts
+            .sorted(by: >)
+            .map { dayStart in
+                DayHistory(
+                    id: dayStart,
+                    date: dayStart,
+                    summary: summary(for: dayStart, calendar: calendar),
+                    sessions: sessions(for: dayStart, calendar: calendar)
+                )
+            }
     }
 
     func tick() {
@@ -451,7 +479,7 @@ final class TrackerStore {
     }
 
     private func summary(for date: Date, calendar: Calendar) -> DaySummary {
-        let daySessions = sessions.filter { calendar.isDate($0.startDate, inSameDayAs: date) }
+        let daySessions = sessions(for: date, calendar: calendar)
         var sittingDuration = duration(for: .sitting, in: daySessions)
         var standingDuration = duration(for: .standing, in: daySessions)
 
@@ -472,12 +500,18 @@ final class TrackerStore {
             standingDuration: standingDuration,
             averageSitDuration: averageDuration(for: completedSittingSessions),
             averageStandDuration: averageDuration(for: completedStandingSessions),
-            longestSittingDuration: longestDuration(for: .sitting, in: daySessions),
-            longestStandingDuration: longestDuration(for: .standing, in: daySessions),
+            longestSittingDuration: longestDuration(for: .sitting, on: date, in: daySessions, calendar: calendar),
+            longestStandingDuration: longestDuration(for: .standing, on: date, in: daySessions, calendar: calendar),
             targetSittingShare: preferences.targetSittingShare,
             targetStandingShare: preferences.targetStandingShare,
             goalStatus: goalStatus(sittingDuration: sittingDuration, standingDuration: standingDuration)
         )
+    }
+
+    private func sessions(for date: Date, calendar: Calendar) -> [TrackingSession] {
+        sessions
+            .filter { calendar.isDate($0.startDate, inSameDayAs: date) }
+            .sorted { $0.startDate > $1.startDate }
     }
 
     private func duration(for posture: Posture, in sessions: [TrackingSession]) -> TimeInterval {
@@ -491,7 +525,12 @@ final class TrackerStore {
         return sessions.reduce(0) { $0 + $1.duration } / Double(sessions.count)
     }
 
-    private func longestDuration(for posture: Posture, in sessions: [TrackingSession]) -> TimeInterval {
+    private func longestDuration(
+        for posture: Posture,
+        on date: Date,
+        in sessions: [TrackingSession],
+        calendar: Calendar
+    ) -> TimeInterval {
         let completedLongest = sessions
             .filter { $0.posture == posture }
             .map(\.duration)
@@ -499,7 +538,7 @@ final class TrackerStore {
 
         guard let activeSession,
               activeSession.posture == posture,
-              Calendar.current.isDateInToday(activeSession.startDate) else {
+              calendar.isDate(activeSession.startDate, inSameDayAs: date) else {
             return completedLongest
         }
 

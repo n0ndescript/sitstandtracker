@@ -3,6 +3,7 @@ import SwiftUI
 struct ContentView: View {
     @Environment(TrackerStore.self) private var trackerStore
     @State private var selectedPage = AppPage.dashboard
+    @State private var expandedHistoryDayIDs: Set<Date> = []
     @State private var currentTime = Date()
 
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -224,10 +225,25 @@ struct ContentView: View {
 
     private var historyPage: some View {
         VStack(alignment: .leading, spacing: 22) {
-            pageHeader(title: "History", subtitle: "Today")
+            pageHeader(title: "History", subtitle: "\(trackerStore.historyDays.count) tracked \(trackerStore.historyDays.count == 1 ? "day" : "days")")
 
-            dailySummaryStrip
-            sessionList(limit: nil)
+            if trackerStore.historyDays.isEmpty {
+                Text("No history yet.")
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .panelStyle()
+            } else {
+                VStack(spacing: 14) {
+                    ForEach(trackerStore.historyDays) { day in
+                        historyDayCard(for: day)
+                    }
+                }
+            }
+        }
+        .onAppear {
+            if let today = trackerStore.historyDays.first?.id {
+                expandedHistoryDayIDs.insert(today)
+            }
         }
     }
 
@@ -312,6 +328,86 @@ struct ContentView: View {
             summaryCard(for: .sitting, color: Color(red: 0.20, green: 0.39, blue: 0.63))
             summaryCard(for: .standing, color: Color(red: 0.16, green: 0.50, blue: 0.37))
         }
+    }
+
+    private func historyDayCard(for day: DayHistory) -> some View {
+        let isExpanded = expandedHistoryDayIDs.contains(day.id)
+
+        return VStack(alignment: .leading, spacing: 16) {
+            Button {
+                toggleHistoryDay(day.id)
+            } label: {
+                HStack(spacing: 16) {
+                    Image(systemName: isExpanded ? "chevron.down.circle.fill" : "chevron.right.circle.fill")
+                        .font(.title3)
+                        .foregroundStyle(Color.accentColor)
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(historyTitle(for: day.date))
+                            .font(.title3.weight(.bold))
+
+                        Text("\(day.sessions.count) completed \(day.sessions.count == 1 ? "session" : "sessions")")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Spacer()
+
+                    statusBadge(for: day.summary.goalStatus)
+                }
+            }
+            .buttonStyle(.plain)
+
+            HStack(spacing: 14) {
+                dayMetric(title: "Sitting", value: day.summary.sittingDuration.formattedShortDuration, symbolName: Posture.sitting.symbolName)
+                dayMetric(title: "Standing", value: day.summary.standingDuration.formattedShortDuration, symbolName: Posture.standing.symbolName)
+                dayMetric(title: "Standing Share", value: "\(Int((day.summary.percentage(for: .standing) * 100).rounded()))%", symbolName: "percent")
+            }
+
+            if isExpanded {
+                Divider()
+
+                if day.sessions.isEmpty {
+                    Text("No completed sessions for this day.")
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.vertical, 4)
+                } else {
+                    VStack(spacing: 10) {
+                        ForEach(day.sessions) { session in
+                            historySessionRow(session)
+                        }
+                    }
+                }
+            }
+        }
+        .panelStyle()
+    }
+
+    private func historySessionRow(_ session: TrackingSession) -> some View {
+        HStack(spacing: 14) {
+            Image(systemName: session.posture.symbolName)
+                .font(.headline)
+                .foregroundStyle(session.posture == .standing ? Color(red: 0.16, green: 0.50, blue: 0.37) : Color(red: 0.20, green: 0.39, blue: 0.63))
+                .frame(width: 34, height: 34)
+                .background(Color.white.opacity(0.8), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(session.posture.title)
+                    .font(.headline)
+
+                Text(sessionRangeText(for: session))
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+
+            Spacer()
+
+            Text(session.duration.formattedShortDuration)
+                .font(.headline.monospacedDigit())
+        }
+        .padding(12)
+        .background(Color.white.opacity(0.56), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
     }
 
     private var ratioBar: some View {
@@ -517,6 +613,28 @@ struct ContentView: View {
         .background(Color.white.opacity(0.62), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
     }
 
+    private func dayMetric(title: String, value: String, symbolName: String) -> some View {
+        HStack(spacing: 10) {
+            Image(systemName: symbolName)
+                .foregroundStyle(Color.accentColor)
+                .frame(width: 22)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+
+                Text(value)
+                    .font(.headline.monospacedDigit())
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.75)
+            }
+        }
+        .padding(14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.white.opacity(0.56), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+    }
+
     private func preferenceStepperRow(
         title: String,
         value: Int,
@@ -559,6 +677,27 @@ struct ContentView: View {
         } else {
             trackerStore.stopTracking()
         }
+    }
+
+    private func toggleHistoryDay(_ id: Date) {
+        if expandedHistoryDayIDs.contains(id) {
+            expandedHistoryDayIDs.remove(id)
+        } else {
+            expandedHistoryDayIDs.insert(id)
+        }
+    }
+
+    private func historyTitle(for date: Date) -> String {
+        let calendar = Calendar.current
+        if calendar.isDateInToday(date) {
+            return "Today"
+        }
+
+        if calendar.isDateInYesterday(date) {
+            return "Yesterday"
+        }
+
+        return date.formatted(date: .abbreviated, time: .omitted)
     }
 
     private var standingMinutesBinding: Binding<Int> {

@@ -173,6 +173,8 @@ Acceptance criteria:
 
 ## Phase 4: History Page
 
+Status: Completed on 2026-04-28. See `PHASE-4-HANDOFF.md` for details on what was implemented and what remains incomplete.
+
 Goal: add day-grouped local history with goal status.
 
 Likely files:
