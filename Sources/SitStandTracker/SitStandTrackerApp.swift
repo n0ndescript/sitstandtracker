@@ -14,11 +14,20 @@ struct SitStandTrackerApp: App {
     @State private var trackerStore = TrackerStore()
 
     var body: some Scene {
-        WindowGroup {
+        WindowGroup("SitStandTracker", id: "dashboard") {
             ContentView()
                 .environment(trackerStore)
                 .frame(minWidth: 980, minHeight: 680)
         }
         .windowResizability(.contentSize)
+
+        MenuBarExtra {
+            MenuBarPanel()
+                .environment(trackerStore)
+        } label: {
+            MenuBarLabel()
+                .environment(trackerStore)
+        }
+        .menuBarExtraStyle(.window)
     }
 }
