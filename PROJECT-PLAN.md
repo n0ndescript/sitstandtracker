@@ -99,6 +99,8 @@ Notes:
 
 ## Phase 2: Dashboard Shell
 
+Status: Completed on 2026-04-28. See `PHASE-2-HANDOFF.md` for details on what was implemented and what remains incomplete.
+
 Goal: replace the simple one-page UI with the startup dashboard described in `STARTUP-UI.md`.
 
 Likely files:
