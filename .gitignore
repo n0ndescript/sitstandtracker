@@ -6,6 +6,7 @@
 Package.resolved
 
 # Xcode
+.DerivedData/
 DerivedData/
 *.xcworkspace/
 *.xcodeproj/xcuserdata/
@@ -16,4 +17,3 @@ DerivedData/
 # macOS app artifacts
 *.app
 *.dSYM/
-

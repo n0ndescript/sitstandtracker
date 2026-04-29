@@ -4,6 +4,11 @@ struct ContentView: View {
     @Environment(TrackerStore.self) private var trackerStore
     @State private var selectedPage = AppPage.dashboard
     @State private var expandedHistoryDayIDs: Set<Date> = []
+    private let sidebarWidth: CGFloat = 236
+    private let sidebarContentInset: CGFloat = 22
+    private var sidebarContentWidth: CGFloat {
+        sidebarWidth - (sidebarContentInset * 2)
+    }
 
     var body: some View {
         HStack(spacing: 0) {
@@ -30,8 +35,7 @@ struct ContentView: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
-            .padding(.horizontal, 18)
-            .padding(.top, 24)
+            .padding(.top, 30)
 
             VStack(spacing: 6) {
                 ForEach(AppPage.allCases) { page in
@@ -40,7 +44,7 @@ struct ContentView: View {
                     } label: {
                         Label(page.title, systemImage: page.symbolName)
                             .font(.headline)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .frame(width: sidebarContentWidth - 28, alignment: .leading)
                             .padding(.horizontal, 14)
                             .padding(.vertical, 12)
                             .background(
@@ -52,7 +56,7 @@ struct ContentView: View {
                     .foregroundStyle(selectedPage == page ? Color.accentColor : Color.primary)
                 }
             }
-            .padding(.horizontal, 10)
+            .frame(width: sidebarContentWidth, alignment: .leading)
 
             Spacer()
 
@@ -64,13 +68,15 @@ struct ContentView: View {
                     .font(.title3.monospacedDigit().weight(.bold))
             }
             .padding(16)
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(width: sidebarContentWidth, alignment: .leading)
             .background(Color.white.opacity(0.72), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-            .padding(.horizontal, 12)
             .padding(.bottom, 16)
         }
-        .frame(width: 220)
+        .frame(width: sidebarContentWidth, alignment: .leading)
+        .padding(.horizontal, sidebarContentInset)
+        .frame(width: sidebarWidth, alignment: .leading)
         .background(Color(red: 0.95, green: 0.96, blue: 0.94))
+        .clipped()
     }
 
     @ViewBuilder

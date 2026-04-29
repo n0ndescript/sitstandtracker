@@ -72,12 +72,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 struct SitStandTrackerApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @State private var trackerStore = TrackerStore()
+    private let dashboardMinimumSize = CGSize(width: 1060, height: 680)
+    private let dashboardDefaultSize = CGSize(width: 1120, height: 760)
 
     var body: some Scene {
         Window("SitStandTracker", id: "dashboard") {
             ContentView()
                 .environment(trackerStore)
-                .frame(minWidth: 980, minHeight: 680)
+                .frame(
+                    minWidth: dashboardMinimumSize.width,
+                    minHeight: dashboardMinimumSize.height
+                )
                 .onAppear {
                     appDelegate.prepareForQuit = {
                         trackerStore.prepareForQuit()
@@ -90,7 +95,8 @@ struct SitStandTrackerApp: App {
                     }
                 }
         }
-        .windowResizability(.contentSize)
+        .defaultSize(width: dashboardDefaultSize.width, height: dashboardDefaultSize.height)
+        .windowResizability(.contentMinSize)
 
         MenuBarExtra {
             MenuBarPanel()
