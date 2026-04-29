@@ -6,10 +6,10 @@ This document turns the product specs into an implementation roadmap that can be
 
 The existing docs remain the product source of truth:
 
-- `SPEC.md` defines the overall MVP.
-- `DATA-MODEL.md` defines the intended domain model.
-- `STATE-MACHINE.md` defines runtime behavior.
-- `STARTUP-UI.md`, `PAGE-SPECS.md`, `INTERACTIONS.md`, and `MENUBAR-ALERTS.md` define UI and interaction behavior.
+- `../specs/SPEC.md` defines the overall MVP.
+- `../specs/DATA-MODEL.md` defines the intended domain model.
+- `../specs/STATE-MACHINE.md` defines runtime behavior.
+- `../specs/STARTUP-UI.md`, `../specs/PAGE-SPECS.md`, `../specs/INTERACTIONS.md`, and `../specs/MENUBAR-ALERTS.md` define UI and interaction behavior.
 - `DECISIONS.md` captures final product choices.
 
 This plan focuses on implementation order, dependencies, and acceptance criteria.
@@ -59,7 +59,7 @@ The current app does not yet implement:
 
 ## Phase 1: Domain Model Foundation
 
-Status: Completed on 2026-04-28. See `PHASE-1-HANDOFF.md` for details on what was implemented and what remains incomplete.
+Status: Completed on 2026-04-28.
 
 Goal: expand the current simple model so later dashboard, alert, and history features have stable state to use.
 
@@ -99,9 +99,9 @@ Notes:
 
 ## Phase 2: Dashboard Shell
 
-Status: Completed on 2026-04-28. See `PHASE-2-HANDOFF.md` for details on what was implemented and what remains incomplete.
+Status: Completed on 2026-04-28.
 
-Goal: replace the simple one-page UI with the startup dashboard described in `STARTUP-UI.md`.
+Goal: replace the simple one-page UI with the startup dashboard described in `../specs/STARTUP-UI.md`.
 
 Likely files:
 
@@ -143,7 +143,7 @@ Acceptance criteria:
 
 ## Phase 3: Settings And Preferences Editing
 
-Status: Completed on 2026-04-28. See `PHASE-3-HANDOFF.md` for details on what was implemented and what remains incomplete.
+Status: Completed on 2026-04-28.
 
 Goal: let the user edit the work-cycle pair that drives ratios and later alerts.
 
@@ -173,7 +173,7 @@ Acceptance criteria:
 
 ## Phase 4: History Page
 
-Status: Completed on 2026-04-28. See `PHASE-4-HANDOFF.md` for details on what was implemented and what remains incomplete.
+Status: Completed on 2026-04-28.
 
 Goal: add day-grouped local history with goal status.
 
@@ -205,7 +205,7 @@ Acceptance criteria:
 
 ## Phase 5: Analytics Page
 
-Status: Completed on 2026-04-28. See `PHASE-5-HANDOFF.md` for details on what was implemented and what remains incomplete.
+Status: Completed on 2026-04-28.
 
 Goal: add a narrow, useful analytics view for recent ratio behavior.
 
@@ -237,7 +237,7 @@ Acceptance criteria:
 
 ## Phase 6: Alert State Engine
 
-Status: Completed on 2026-04-28. See `PHASE-6-HANDOFF.md` for details on what was implemented and what remains incomplete.
+Status: Completed on 2026-04-28.
 
 Goal: implement threshold evaluation without menu-bar UI first.
 
@@ -265,7 +265,7 @@ Acceptance criteria:
 
 ## Phase 7: Menu Bar Extra
 
-Status: Completed on 2026-04-28. See `PHASE-7-HANDOFF.md` for details on what was implemented and what remains incomplete.
+Status: Completed on 2026-04-28.
 
 Goal: add the persistent menu bar companion.
 
@@ -308,7 +308,7 @@ Acceptance criteria:
 
 ## Phase 8: Window And App Lifecycle
 
-Status: Completed on 2026-04-28. See `PHASE-8-HANDOFF.md` for details on what was implemented and what remains incomplete.
+Status: Completed on 2026-04-28.
 
 Goal: make the app behave like a hybrid dashboard plus menu-bar utility.
 
@@ -336,7 +336,7 @@ Acceptance criteria:
 
 ## Phase 9: Screen Lock And Day Boundary Rules
 
-Status: Completed on 2026-04-28. See `PHASE-9-HANDOFF.md` for details on what was implemented and what remains incomplete.
+Status: Completed on 2026-04-28.
 
 Goal: implement the lifecycle rules that make time accounting accurate.
 
@@ -366,7 +366,7 @@ Acceptance criteria:
 
 ## Phase 10: Polish And Verification
 
-Status: Completed on 2026-04-28. See `PHASE-10-HANDOFF.md` for final polish notes, verification results, and remaining manual checks.
+Status: Completed on 2026-04-28.
 
 Goal: tighten UX, docs, and maintainability after feature completion.
 

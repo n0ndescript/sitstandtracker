@@ -24,7 +24,12 @@ swift run SitStandTracker
 ## Open In Xcode
 
 ```bash
-open Package.swift
+open SitStandTracker.xcodeproj
 ```
 
 Then run the `SitStandTracker` scheme.
+
+## Docs
+
+- Product and behavior specs: [`docs/specs`](docs/specs)
+- Planning, decisions, and App Store notes: [`docs/planning`](docs/planning)
